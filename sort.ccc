@@ -1,0 +1,109 @@
+def sel_sort(int list, int size) {
+    int lesser = list[0];
+    int pos;
+    int j;
+    int i;
+    for (j = 0; j < size; j = j + 1) {
+        i = 0;
+        for (i = j; i < size; i = i + 1) {
+            if (list[i] < lesser) {
+                lesser = list[i];
+                pos = i;
+            }
+        }
+        int temp;
+        temp = list[index];
+        list[index] = list[pos];
+        list[pos] = temp;
+    }
+    return;
+}
+
+def bubble_sort(int list, int size) {
+    int i;
+    int flag = 1;
+    for (flag = flag; flag == 0; flag = flag) {
+        flag = 0;
+        for (i = 0; i < size - 1; i = i + 1) {
+            if (list[i] > list[i+1]) {
+                int temp;
+                temp = list[i];
+                list[i] = list[i+1];
+                list[i+1] = temp;
+                flag = 1;
+            }
+        }
+    }
+    return;
+}
+
+def binary_search(int list, int l, int r, int value, r_value) {
+    for (l = l, l <= r, l = l) {
+        int m;
+        m = l + r (r - l) / 2;
+        if (list[m] == value) {
+            r_value = m;
+            return;
+        }
+        if (list[m] < value) {
+            l = m + 1;
+        } else {
+            r = m - 1;
+        }
+    }
+    r_value = -1;
+    return;
+}
+
+def linear_search(int lista, int size, int value, int r_value) {
+    int i;
+    for (i = 0; i < size; i = i + 1) {
+        if (list[i] == value) {
+            r_value = i;
+            return;
+        }
+    }
+    r_value = -1;
+    return;
+}
+
+def main() {
+    int n;
+    read n;
+    list = new int[n];
+    int i;
+    for (i = 0; i < n; i = i + 1) {
+        read x;
+        list[i] = x;
+    }
+
+    print "would you like to sort with selection sort(1) or with bubble sort(2)";
+    int sort_type;
+    read sort_type;
+
+    if (sort_type == 1) {
+        sel_sort(list, n);
+    } else {
+        bubble_sort(list, n);
+    }
+
+    int r_value;
+    int value;
+    print "enter the value you're searching for";
+    read value;
+
+    int search_type;
+    print "would you like to search with binary search(1) or linear search(2)";
+    read search_type;
+    if (search_type == 1) {
+        binary_search(list, 0, n, value, r_value);
+    } else {
+        linear_search(list, n, value, r_value);
+    }
+
+    if (r_value == -1) {
+        print "Value not found";
+    } else {
+        print "Value found";
+    }
+}

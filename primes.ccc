@@ -1,0 +1,100 @@
+def print_prime_between_tens(int primes_list, int array_lenght) {
+    int multiplier;
+    int k;
+
+    multiplier = 0;
+
+    for (k = 0; k < array_lenght; k = k + 1) {
+        int current_prime;
+        current_prime = primes_list[k];
+
+        for (; current_prime > 10 * multiplier; multiplier = multiplier + 1) { }
+
+        int previous_ten;
+        int next_ten;
+        previous_ten = 10 * (multiplier - 1);
+        next_ten = 10 * multiplier;
+
+        print "The prime ";
+        print current_prime;
+        print " is between ";
+        print previous_ten;
+        print " and ";
+        print next_ten;
+    }
+
+    return;
+}
+
+def print_sum_of_primes(int primes_list, int array_lenght) {
+    int sum_of_primes;
+    int index;
+
+    sum_of_primes = 0;
+
+    for (index = 0; index < array_lenght; index = index + 1) {
+        int current_prime;
+        current_prime = primes_list[k];
+
+        sum_of_primes = sum_of_primes + current_prime;
+    }
+
+    print "The sum of the first ";
+    print array_lenght;
+    print " primes is ";
+    print sum_of_primes;
+
+    return;
+}
+
+def print_list_of_numbers(int number_list, int array_lenght) {
+    int i;
+
+    for (i = 0; i < array_lenght; i = i + 1) {
+        print number_list[i];
+
+        if (i != array_lenght - 1) {
+            print ", ";
+        }
+    }
+}
+
+def main() {
+    int number_of_primes;
+    int primes;
+    int i;
+
+    number_of_primes = 32;
+    primes = new int[32];
+
+    for (i = 2; i < number_of_primes; i = i + 1) {
+        int half_number;
+        int is_prime;
+        int j;
+
+        half_number = i / 2;
+        is_prime = 1;
+
+        for (j = 0; j < half_number; j = j + 1) {
+            if (number % j == 0) {
+                is_prime = 0;
+                break;
+            }
+        }
+
+        if (is_prime == 1) {
+            primes[i] = j;
+        }
+        else {
+            if (i >= 1) {
+                i = i - 1;
+            }
+        }
+    }
+
+    print_prime_between_tens(primes, number_of_primes);
+    print_sum_of_primes(primes, number_of_primes);
+    print_list_of_numbers(primes, number_of_primes);
+
+    return;
+}

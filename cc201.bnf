@@ -1,0 +1,62 @@
+PROGRAM ::= (STATEMENT | FUNCLIST)?
+FUNCLIST ::= FUNCDEF FUNCLIST | FUNCDEF
+
+- FUNCDEF ::= def ident(PARAMLIST){STATELIST}
++ FUNCDEF ::= def ident(PARAMLIST){ (STATEMENT)* }
+- PARAMLIST ::= (( int | float | string ) ident, PARAMLIST
+-              | ( int | float | string ) ident)?
++ PARAMLIST ::= (PARAM (,  PARAM)*)?
++ PARAM ::= ( int | float | string ) ident ([])*
+- STATELIST ::= STATEMENT (STATELIST)?
+
+STATEMENT ::=
+            | VARDECL;
+            | ATRIBSTAT;
++           | FUNCCALL;
+            | PRINTSTAT;
+            | READSTAT;
+            | RETURNSTAT;
+            | IFSTAT
+            | FORSTAT
+-           | {STATELIST}
++           | {STATEMENT*}
+            | break;
+            | ;
+
+VARDECL ::= ( int | float | string ) ident ([int_constant])∗
+
+- ATRIBSTAT ::= LVALUE = ( EXPRESSION | ALLOCEXPRESSION | FUNCCALL)
++ ATRIBSTAT ::= LVALUE = ( EXPRESSION | ALLOCEXPRESSION)
+- LVALUE ::= ident([NUMEXPRESSION])*
++ LVALUE ::= ident([EXPRESSION])*
+
+PRINTSTAT ::= print EXPRESSION
+READSTAT ::= read LVALUE
+
+- RETURNSTAT ::= return
++ RETURNSTAT ::= return (EXPRESSION)?
+
+IFSTAT ::= if (EXPRESSION) STATEMENT (else STATEMENT)?
+
+FORSTAT ::= for (ATRIBSTAT; EXPRESSION; ATRIBSTAT) STATEMENT
+
+- FUNCCALL ::= ident(PARAMLISTCALL)
++ FUNCCALL ::= ident(PARAMLISTCALL?)
+- PARAMLISTCALL ::= (ident, PARAMLISTCALL | ident)?
++ PARAMLISTCALL ::= EXPRESSION (, EXPRESSION)*
+
+- ALLOCEXPRESSION ::= new (int | float | string) ([ NUMEXPRESSION ])+
++ ALLOCEXPRESSION ::= new (int | float | string) ([ EXPRESSION ])+
+
+EXPRESSION ::= NUMEXPRESSION (( < | > | <= | >= | == | !=) NUMEXPRESSION)?
+NUMEXPRESSION ::= TERM ((+ |−) TERM)∗
+TERM ::= UNARYEXPR(( ∗ | \ | %) UNARYEXPR)∗
+UNARYEXPR ::= (+ |−)? FACTOR
+FACTOR ::=
+         | int_constant
+         | float_constant
+         | string_constant
+         | null
++        | FUNCCALL
+         | LVALUE
+         | (NUMEXPRESSION)

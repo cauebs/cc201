@@ -1,0 +1,100 @@
+def print_array(int s[], int begin, int end)
+{
+    int i;
+    for (i = begin; i < end; i = i + 1)
+    {
+        print s[i];
+    }
+}
+
+def reverse(int s[], int begin, int end)
+{
+    int size;
+    size = end - begin;
+
+    int i;
+    for (i = 0; i < size/2; i = i + 1)
+    {
+        int temp;
+        temp = s[begin + i];
+        s[begin + i] = s[end - 1 - i];
+        s[end - 1 - i] = temp;
+    }
+}
+
+def rotate(int s[], int begin, int end, int k)
+{
+    reverse(s, begin, end - k);
+    reverse(s, end - k, end);
+    reverse(s, begin, end);
+}
+
+def stable_partition(int s[], int begin, int end, int pivot)
+{
+    int size;
+    size = end - begin;
+
+    if (size < 2)
+    {
+        if (s[begin] < pivot)
+            return begin + 1;
+        else
+            return begin;
+    }
+
+    int midpoint;
+    midpoint = begin + size/2;
+
+    int left_partition_point;
+    left_partition_point = stable_partition(s, begin, midpoint, pivot);
+    int right_partition_point;
+    right_partition_point = stable_partition(s, midpoint, end, pivot);
+
+    rotate(s,
+           left_partition_point,
+           right_partition_point,
+           right_partition_point - midpoint);
+
+    int partition_point;
+    partition_point = left_partition_point + (right_partition_point - midpoint);
+    return partition_point;
+}
+
+def stable_quicksort(int s[], int begin, int end)
+{
+    int size;
+    size = end - begin;
+
+    if (size < 2)
+    {
+        return;
+    }
+
+    int pivot;
+    pivot = s[begin];
+    int partition_point;
+    partition_point = stable_partition(s, begin, end, pivot);
+
+    stable_quicksort(s, begin, partition_point);
+    stable_quicksort(s, partition_point + 1, end);
+}
+
+def main()
+{
+    int s[20];
+    s = new int[20];
+
+    int i;
+    for (i = 0; i < 20; i = i + 1)
+    {
+        read s[i];
+    }
+
+    print "before:\n";
+    print_array(s, 0, 20);
+
+    stable_quicksort(s, 0, 20);
+
+    print "after:\n";
+    print_array(s, 0, 20);
+}
