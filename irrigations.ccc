@@ -24,12 +24,27 @@ def printIrrigationTimes(int* irrigationTimesInSeconds, int desiredNumberOfIrrig
 // Função fictícia.
 def writeOnPLCMemory(int value, int memoryPosition, SerialConnection connection) {
 	// Escreve na memória da CLP o valor recebido usando a conexão serial passada como parâmetro.
+	// Retorna true se a operação foi bem sucedida e false se a operação falhou.
+}
+
+def writeIrrigationsOnPLC(int* irrigationTimesInSeconds, int desiredNumberOfIrrigations) {
+	// Posição da memória na CLP onde é registrado o primeiro horário de irrigação.
+	int firstIrrigationMemoryPosition = 4096;
+
+	SerialConnection connection = new SerialConnection();
+
+	for (i = 0; i < desiredNumberOfIrrigations; i++) {
+		int memoryPosition = firstIrrigationMemoryPosition + i;
+		bool result = writeOnPLCMemory(irrigationTimesInSeconds[i], memoryPosition, connection);
+		if (!result) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 def main() {
-	
-	// Posição da memória na CLP onde é registrado o primeiro horário de irrigação.
-	int firstIrrigationMemoryPosition = 4096;
 
 	// Declara as configurações de horário de irrigações para um determinado setor.
 	int firstIrrigationTimeInSeconds = 23400; // (06:30)
@@ -86,12 +101,12 @@ def main() {
 	printIrrigationTimes(irrigationTimesInSeconds, desiredNumberOfIrrigations);
 
 	int totalIrrigationTime = desiredNumberOfIrrigations * irrigationDurationInSeconds;
-	print("Tempo total de irrigação: " + totalIrrigationTime + " segundos.");
+	print("Tempo total de irrigação: " + totalIrrigationTime + " segundos.\n");
 
-	// Escreve os valores na memória da CLP.
-	SerialConnection connection = new SerialConnection();
-	for (i = 0; i < desiredNumberOfIrrigations; i++) {
-		int memoryPosition = firstIrrigationMemoryPosition + i;
-		writeOnPLCMemory(irrigationTimesInSeconds[i], memoryPosition, connection);
+	if (writeIrrigationsOnPLC(irrigationTimesInSeconds, desiredNumberOfIrrigations)) {
+		print("\nSucesso!\n");
+	}
+	else {
+		print("\nOcorreu um problema durante o processo.\n");
 	}
 }
