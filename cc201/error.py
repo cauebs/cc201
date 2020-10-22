@@ -9,19 +9,26 @@ class CCBaseError(BaseException):
         self.message = message
 
     def __str__(self):
+        source_lines = self.source.splitlines()
+
+        num_lines = 3
+        first_line_index = self.line_number - num_lines
+        lines_to_show = source_lines[first_line_index:][:num_lines]
+
+        def tabs_to_spaces(s, n=4):
+            return s.replace('\t', ' ' * n)
+
+        snippet = '\n'.join(
+            f' {i:> 4} | {tabs_to_spaces(line)}'
+            for i, line in enumerate(lines_to_show, start=first_line_index+1)
+        )
+
         line_begin = self.source.rfind('\n', 0, self.index) + 1
         offset = self.index - line_begin
 
-        source_lines = self.source.splitlines()
-
-        first_line = self.line_number - 2
-        last_line = self.line_number
-
-        snippet = '\n'.join(
-            f'{ln:> 3} | {source_lines[ln-1]}'
-            for ln in range(first_line, last_line+1)
-        )
-        offset += 6
+        # replace tabs with 4 spaces
+        offset += self.source.count('\t', line_begin, self.index) * (4 - 1)
+        offset += 8  # gutter length
 
         return (
             f'{self.label}\n'
