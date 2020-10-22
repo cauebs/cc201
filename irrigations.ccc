@@ -1,0 +1,82 @@
+def int CalculateIrrigationsInterval(int firstIrrigationTimeInSeconds, int lastIrrigationTimeInSeconds, int desiredNumberOfIrrigations) {
+	int response = 0;
+
+	int timeWindow = lastIrrigationTimeInSeconds - firstIrrigationTimeInSeconds;
+
+	if (desiredNumberOfIrrigations == 1) {
+		response = timeWindow;
+	}
+	else {
+		response = timeWindow / (desiredNumberOfIrrigations - 1);		
+	}
+
+	return response;
+}
+
+def void PrintIrrigationTimes(int* irrigationTimesInSeconds, int desiredNumberOfIrrigations) {
+	for (i = 0; i < desiredNumberOfIrrigations; i++) {
+		int hour = irrigationTimesInSeconds[i] / 3600;
+		int minute = ((irrigationTimesInSeconds[i] / 60) % 60);
+		print("Horário " + i + ": " + hour + ":" + minute + "\n");
+	}
+}
+
+def void main() {
+	
+	// Declara as configurações de horário de irrigações para um determinado setor.
+	int firstIrrigationTimeInSeconds = 23400; // (06:30)
+	int lastIrrigationTimeInSeconds = 70200; // (19:30)
+	int desiredNumberOfIrrigations = 30;
+	int irrigationDurationInSeconds = 45;
+
+	int[] irrigationTimesInSeconds = new int[30];
+
+	// Verifica se as configurações são coerentes.
+	if (firstIrrigationTimeInSeconds < 0) {
+		return;
+	}
+
+	if (lastIrrigationTimeInSeconds < 0) {
+		return;
+	}
+
+	if (firstIrrigationTimeInSeconds > lastIrrigationTimeInSeconds) {
+		return;
+	}
+
+	if (desiredNumberOfIrrigations <= 0) {
+		return;
+	}
+
+	if (irrigationDurationInSeconds <= 0) {
+		return;
+	}
+
+	int intervalBetweenEachIrrigation = 0;
+	intervalBetweenEachIrrigation = CalculateIrrigationsInterval(firstIrrigationTimeInSeconds, lastIrrigationTimeInSeconds, desiredNumberOfIrrigations);
+
+	// Verifica se é possível realizar o agendamento das irrigações com o intervalo calculado.
+	if (irrigationDurationInSeconds >= intervalBetweenEachIrrigation) {
+		return;
+	}
+
+	// Determina horários das irrigações.
+	irrigationTimesInSeconds[0] = firstIrrigationTimeInSeconds;
+
+	int i = 0;
+	
+	if (desiredNumberOfIrrigations > 1) {
+		int lastIrrigationTime = firstIrrigationTimeInSeconds;
+
+		for (i = 1; i < desiredNumberOfIrrigations; i++) {
+			int irrigationTime = lastIrrigationTime + intervalBetweenEachIrrigation;
+			irrigationTimesInSeconds[i] = irrigationTime;
+			lastIrrigationTime = irrigationTime;
+		}
+	}
+
+	PrintIrrigationTimes(irrigationTimesInSeconds, desiredNumberOfIrrigations);
+
+	int totalIrrigationTime = desiredNumberOfIrrigations * irrigationDurationInSeconds;
+	print("Tempo total de irrigação: " + totalIrrigationTime + " segundos.");
+}
