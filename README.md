@@ -23,6 +23,16 @@ Porém isso instala a aplicação para o usuário e exige que depois se faça:
 Depois basta remover o diretório e o resto do sistema permanece intocado.
 Talvez seja importante executar `deactivate` no shell para restaurar o PATH (ou simplesmente iniciar outra sessão do shell).
 
+## Execução em Windows (caso ocorra problema para criar o ambiente virtual)
+```bash
+C:\CAMINHO\cc201> pip install .
+C:\CAMINHO\cc201> cc201 <arquivo-fonte>
+```
+
+### Exemplo
+```bash
+C:\CAMINHO\cc201> cc201 primes.ccc
+```
 
 ## Resolução de problemas
 
