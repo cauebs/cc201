@@ -1,4 +1,4 @@
-def int CalculateIrrigationsInterval(int firstIrrigationTimeInSeconds, int lastIrrigationTimeInSeconds, int desiredNumberOfIrrigations) {
+def CalculateIrrigationsInterval(int firstIrrigationTimeInSeconds, int lastIrrigationTimeInSeconds, int desiredNumberOfIrrigations) {
 	int response = 0;
 
 	int timeWindow = lastIrrigationTimeInSeconds - firstIrrigationTimeInSeconds;
@@ -13,7 +13,7 @@ def int CalculateIrrigationsInterval(int firstIrrigationTimeInSeconds, int lastI
 	return response;
 }
 
-def void PrintIrrigationTimes(int* irrigationTimesInSeconds, int desiredNumberOfIrrigations) {
+def PrintIrrigationTimes(int* irrigationTimesInSeconds, int desiredNumberOfIrrigations) {
 	for (i = 0; i < desiredNumberOfIrrigations; i++) {
 		int hour = irrigationTimesInSeconds[i] / 3600;
 		int minute = ((irrigationTimesInSeconds[i] / 60) % 60);
@@ -21,7 +21,7 @@ def void PrintIrrigationTimes(int* irrigationTimesInSeconds, int desiredNumberOf
 	}
 }
 
-def void main() {
+def main() {
 	
 	// Declara as configurações de horário de irrigações para um determinado setor.
 	int firstIrrigationTimeInSeconds = 23400; // (06:30)
