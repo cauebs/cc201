@@ -1,0 +1,124 @@
+def calculate_irrigations_interval(int firstIrrigationTimeInSeconds, int lastIrrigationTimeInSeconds, int desiredNumberOfIrrigations) {
+	int response;
+	response = 0;
+
+	int timeWindow;
+	timeWindow = lastIrrigationTimeInSeconds - firstIrrigationTimeInSeconds;
+
+	if (desiredNumberOfIrrigations == 1) {
+		response = timeWindow;
+	}
+	else {
+		response = timeWindow / (desiredNumberOfIrrigations - 1);		
+	}
+
+	return response;
+}
+
+def print_irrigation_times(int irrigationTimesInSeconds, int desiredNumberOfIrrigations) {
+	int i;
+	
+	for (i = 0; i < desiredNumberOfIrrigations; i = i + 1) {
+		int hour;
+		int minute;
+
+		hour = irrigationTimesInSeconds[i] / 3600;
+		minute = ((irrigationTimesInSeconds[i] / 60) % 60);
+
+		print("Horário " + i + ": " + hour + ":" + minute + "\n");
+	}
+}
+
+def write_irrigations_on_plc_memory(int irrigationTimesInSeconds, int desiredNumberOfIrrigations) {
+	int firstIrrigationMemoryPosition;
+	firstIrrigationMemoryPosition = 4096;
+
+	string connectionPort;
+	connection = "ttsy1";
+
+	int i;
+
+	for (i = 0; i < desiredNumberOfIrrigations; i = i + 1) {
+		int memoryPosition;
+		int result;
+		
+		memoryPosition = firstIrrigationMemoryPosition + i;
+		result = write_on_plc(irrigationTimesInSeconds[i], memoryPosition, connection);
+
+		if (result == 0) {
+			return 0;
+		}
+	}
+
+	return 1;
+}
+
+def main() {
+	int firstIrrigationTimeInSeconds;
+	int lastIrrigationTimeInSeconds;
+	int desiredNumberOfIrrigations;
+	int irrigationDurationInSeconds;
+
+	firstIrrigationTimeInSeconds = 23400;
+	lastIrrigationTimeInSeconds = 70200;
+	desiredNumberOfIrrigations = 30;
+	irrigationDurationInSeconds = 45;
+
+	int irrigationTimesInSeconds;
+	irrigationTimesInSeconds = new int[30];
+
+	if (firstIrrigationTimeInSeconds < 0) {
+		return;
+	}
+
+	if (lastIrrigationTimeInSeconds < 0) {
+		return;
+	}
+
+	if (firstIrrigationTimeInSeconds > lastIrrigationTimeInSeconds) {
+		return;
+	}
+
+	if (desiredNumberOfIrrigations <= 0) {
+		return;
+	}
+
+	if (irrigationDurationInSeconds <= 0) {
+		return;
+	}
+
+	int intervalBetweenEachIrrigation;
+	intervalBetweenEachIrrigation = calculate_irrigations_interval(firstIrrigationTimeInSeconds, lastIrrigationTimeInSeconds, desiredNumberOfIrrigations);
+
+	if (irrigationDurationInSeconds >= intervalBetweenEachIrrigation) {
+		return;
+	}
+
+	irrigationTimesInSeconds[0] = firstIrrigationTimeInSeconds;
+
+	if (desiredNumberOfIrrigations > 1) {
+		int lastIrrigationTime;
+		lastIrrigationTime = firstIrrigationTimeInSeconds;
+
+		int i;
+		for (i = 1; i < desiredNumberOfIrrigations; i = i + 1) {
+			int irrigationTime;
+			irrigationTime = lastIrrigationTime + intervalBetweenEachIrrigation;
+			irrigationTimesInSeconds[i] = irrigationTime;
+			lastIrrigationTime = irrigationTime;
+		}
+	}
+
+	print_irrigation_times(irrigationTimesInSeconds, desiredNumberOfIrrigations);
+
+	int totalIrrigationTime;
+	totalIrrigationTime = desiredNumberOfIrrigations * irrigationDurationInSeconds;
+	print("Tempo total de irrigação: " + totalIrrigationTime + " segundos.\n");
+
+	if (write_irrigations_on_plc_memory(irrigationTimesInSeconds, desiredNumberOfIrrigations)) {
+		print("\nSucesso!\n");
+	}
+	else {
+		print("\nOcorreu um problema durante o processo.\n");
+	}
+}

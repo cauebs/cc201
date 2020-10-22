@@ -8,7 +8,7 @@ def print_prime_between_tens(int primes_list, int array_lenght) {
         int current_prime;
         current_prime = primes_list[k];
 
-        for (; current_prime > 10 * multiplier; multiplier = multiplier + 1) { }
+        for (multiplier = 0; current_prime > 10 * multiplier; multiplier = multiplier + 1) { }
 
         int previous_ten;
         int next_ten;
