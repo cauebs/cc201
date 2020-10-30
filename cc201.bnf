@@ -12,7 +12,6 @@ FUNCLIST ::= FUNCDEF FUNCLIST | FUNCDEF
 STATEMENT ::=
             | VARDECL;
             | ATRIBSTAT;
-+           | FUNCCALL;
             | PRINTSTAT;
             | READSTAT;
             | RETURNSTAT;
@@ -41,7 +40,6 @@ IFSTAT ::= if (EXPRESSION) STATEMENT (else STATEMENT)?
 FORSTAT ::= for (ATRIBSTAT; EXPRESSION; ATRIBSTAT) STATEMENT
 
 - FUNCCALL ::= ident(PARAMLISTCALL)
-+ FUNCCALL ::= ident(PARAMLISTCALL?)
 - PARAMLISTCALL ::= (ident, PARAMLISTCALL | ident)?
 + PARAMLISTCALL ::= EXPRESSION (, EXPRESSION)*
 
@@ -57,6 +55,10 @@ FACTOR ::=
          | float_constant
          | string_constant
          | null
-+        | FUNCCALL
-         | LVALUE
+-        | LVALUE
++        | ident BRACKET_OP
          | (NUMEXPRESSION)
+
++ BRACKET_OP ::=
++              | "(" PARAMLISTCALL? ")"
++              | ( "[" EXPRESSION "]" )*
