@@ -23,7 +23,7 @@ def run():
     except (CCLexicalError, CCSyntaxError) as e:
         print(e)
     else:
-        # pprint(ast)
+        pprint(ast)
         if not lexer.found_errors and not parser.found_errors:
             print('[Source program is valid]')
 
