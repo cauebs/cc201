@@ -42,7 +42,7 @@ class Parser(sly.Parser):
 
     @_('KW_INT', 'KW_FLOAT', 'KW_STRING')
     def prim_ty(self, p):
-        return ast.Type.from_kw(p[0])
+        return ast.PrimType.from_kw(p[0])
 
     @_('[ param { "," param } ]')
     def param_list(self, p):
@@ -55,7 +55,7 @@ class Parser(sly.Parser):
 
     @_('prim_ty IDENT { "[" "]" }')
     def param(self, p):
-        return ast.Param(p[0], p[1], len(p[2]))
+        return ast.Param(ast.Type(p[0], len(p[2])), p[1])
 
     @_(
         'var_decl ";"',
@@ -71,7 +71,6 @@ class Parser(sly.Parser):
     )
     def stmt(self, p):
         if p[0] == "break":
-            print(p[0])
             return ast.Break()
 
         return p[0]
@@ -160,19 +159,19 @@ class Parser(sly.Parser):
 
     @_('INT_CONST')
     def expr(self, p):
-        return ast.Constant(int(p[0]))
+        return ast.Constant(ast.PrimType.INT, int(p[0]))
 
     @_('FLOAT_CONST')
     def expr(self, p):
-        return ast.Constant(float(p[0]))
+        return ast.Constant(ast.PrimType.FLOAT, float(p[0]))
 
     @_('STRING_CONST')
     def expr(self, p):
-        return ast.Constant(str(p[0]))
+        return ast.Constant(ast.PrimType.STRING, str(p[0]))
 
     @_('KW_NULL')
     def expr(self, p):
-        return ast.Constant(None)
+        return ast.Constant(ast.PrimType.NULL, None)
 
     @_('func_call', 'lvalue')
     def expr(self, p):
