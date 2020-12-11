@@ -1,4 +1,4 @@
-class CCBaseError(BaseException):
+class CCBaseError(Exception):
     label = '[Error]'
 
     def __init__(self, source, index, line_number, length, message):

@@ -9,15 +9,15 @@ def calculate_irrigations_interval(int firstIrrigationTimeInSeconds, int lastIrr
 		response = timeWindow;
 	}
 	else {
-		response = timeWindow / (desiredNumberOfIrrigations - 1);		
+		response = timeWindow / (desiredNumberOfIrrigations - 1);
 	}
 
 	return response;
 }
 
-def print_irrigation_times(int irrigationTimesInSeconds, int desiredNumberOfIrrigations) {
+def print_irrigation_times(int irrigationTimesInSeconds[], int desiredNumberOfIrrigations) {
 	int i;
-	
+
 	for (i = 0; i < desiredNumberOfIrrigations; i = i + 1) {
 		int hour;
 		int minute;
@@ -25,15 +25,19 @@ def print_irrigation_times(int irrigationTimesInSeconds, int desiredNumberOfIrri
 		hour = irrigationTimesInSeconds[i] / 3600;
 		minute = ((irrigationTimesInSeconds[i] / 60) % 60);
 
-		print("Horário " + i + ": " + hour + ":" + minute + "\n");
+		print("Horário {i}: {hour}:{minute}\n");
 	}
 }
 
-def write_irrigations_on_plc_memory(int irrigationTimesInSeconds, int desiredNumberOfIrrigations) {
+def write_on_plc(int a, int b, string c) {
+	return 0;
+}
+
+def write_irrigations_on_plc_memory(int irrigationTimesInSeconds[], int desiredNumberOfIrrigations) {
 	int firstIrrigationMemoryPosition;
 	firstIrrigationMemoryPosition = 4096;
 
-	string connectionPort;
+	string connection;
 	connection = "ttsy1";
 
 	int i;
@@ -41,7 +45,7 @@ def write_irrigations_on_plc_memory(int irrigationTimesInSeconds, int desiredNum
 	for (i = 0; i < desiredNumberOfIrrigations; i = i + 1) {
 		int memoryPosition;
 		int result;
-		
+
 		memoryPosition = firstIrrigationMemoryPosition + i;
 		result = write_on_plc(irrigationTimesInSeconds[i], memoryPosition, connection);
 
@@ -64,7 +68,7 @@ def main() {
 	desiredNumberOfIrrigations = 30;
 	irrigationDurationInSeconds = 45;
 
-	int irrigationTimesInSeconds;
+	int irrigationTimesInSeconds[30];
 	irrigationTimesInSeconds = new int[30];
 
 	if (firstIrrigationTimeInSeconds < 0) {
@@ -113,7 +117,7 @@ def main() {
 
 	int totalIrrigationTime;
 	totalIrrigationTime = desiredNumberOfIrrigations * irrigationDurationInSeconds;
-	print("Tempo total de irrigação: " + totalIrrigationTime + " segundos.\n");
+	print("Tempo total de irrigação: {totalIrrigationTime} segundos.\n");
 
 	if (write_irrigations_on_plc_memory(irrigationTimesInSeconds, desiredNumberOfIrrigations)) {
 		print("\nSucesso!\n");
