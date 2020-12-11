@@ -1,4 +1,4 @@
-def sel_sort(int list, int size) {
+def sel_sort(int list[], int size) {
     int lesser;
     int pos;
 
@@ -15,14 +15,14 @@ def sel_sort(int list, int size) {
             }
         }
         int temp;
-        temp = list[index];
-        list[index] = list[pos];
+        temp = list[i];
+        list[i] = list[pos];
         list[pos] = temp;
     }
     return;
 }
 
-def bubble_sort(int list, int size) {
+def bubble_sort(int list[], int size) {
     int i;
     int flag;
     flag = 1;
@@ -41,10 +41,10 @@ def bubble_sort(int list, int size) {
     return;
 }
 
-def binary_search(int list, int l, int r, int value, int r_value) {
+def binary_search(int list[], int l, int r, int value, int r_value) {
     for (l = l; l <= r; l = l) {
         int m;
-        m = l + r (r - l) / 2;
+        m = l + (r - l) / 2;
         if (list[m] == value) {
             r_value = m;
             return;
@@ -59,7 +59,7 @@ def binary_search(int list, int l, int r, int value, int r_value) {
     return;
 }
 
-def linear_search(int lista, int size, int value, int r_value) {
+def linear_search(int list[], int size, int value, int r_value) {
     int i;
     for (i = 0; i < size; i = i + 1) {
         if (list[i] == value) {
@@ -74,9 +74,11 @@ def linear_search(int lista, int size, int value, int r_value) {
 def main() {
     int n;
     read n;
+    int list[10];
     list = new int[n];
     int i;
     for (i = 0; i < n; i = i + 1) {
+        int x;
         read x;
         list[i] = x;
     }

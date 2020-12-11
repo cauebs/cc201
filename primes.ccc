@@ -1,4 +1,4 @@
-def print_prime_between_tens(int primes_list, int array_lenght) {
+def print_prime_between_tens(int primes_list[], int array_lenght) {
     int multiplier;
     int k;
 
@@ -26,7 +26,7 @@ def print_prime_between_tens(int primes_list, int array_lenght) {
     return;
 }
 
-def print_sum_of_primes(int primes_list, int array_lenght) {
+def print_sum_of_primes(int primes_list[], int array_lenght) {
     int sum_of_primes;
     int index;
 
@@ -34,7 +34,7 @@ def print_sum_of_primes(int primes_list, int array_lenght) {
 
     for (index = 0; index < array_lenght; index = index + 1) {
         int current_prime;
-        current_prime = primes_list[k];
+        current_prime = primes_list[index];
 
         sum_of_primes = sum_of_primes + current_prime;
     }
@@ -47,7 +47,7 @@ def print_sum_of_primes(int primes_list, int array_lenght) {
     return;
 }
 
-def print_list_of_numbers(int number_list, int array_lenght) {
+def print_list_of_numbers(int number_list[], int array_lenght) {
     int i;
 
     for (i = 0; i < array_lenght; i = i + 1) {
@@ -61,7 +61,7 @@ def print_list_of_numbers(int number_list, int array_lenght) {
 
 def main() {
     int number_of_primes;
-    int primes;
+    int primes[32];
     int i;
 
     number_of_primes = 32;
@@ -76,7 +76,7 @@ def main() {
         is_prime = 1;
 
         for (j = 0; j < half_number; j = j + 1) {
-            if (number % j == 0) {
+            if (i % j == 0) {
                 is_prime = 0;
                 break;
             }
